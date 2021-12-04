@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello StoreController!{% endblock %}
+
+{% block body %}
+    {{ dump() }}
+    <ul>
+        <li>{{ id }}</li>
+        <li>{{ slug }}</li>
+        <li>{{ app.request.clientIp }}</li>
+        <li>{{ ip }}</li>
+        <li>{{ url }}</li>
+        <li>{{ from_routing }}</li>
+    </ul>
+{% endblock %}
