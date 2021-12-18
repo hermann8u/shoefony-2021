@@ -13,24 +13,18 @@ final class MainController extends AbstractController
     #[Route('/', name: 'main_homepage', methods: ['GET'])]
     public function homepage(): Response
     {
-        return $this->render('main/homepage.html.twig', [
-            'controller_name' => 'MainController',
-        ]);
+        return $this->render('main/homepage.html.twig');
     }
     
     #[Route('/presentation', name: 'main_presentation', methods: ['GET'])]
     public function presentation(): Response
     {
-        return $this->render('main/presentation.html.twig', [
-            'controller_name' => 'MainController',
-        ]);
+        return $this->render('main/presentation.html.twig');
     }
 
     #[Route('/contact', name: 'main_contact', methods: ['GET'])]
     public function contact(): Response
     {
-        return $this->render('main/contact.html.twig', [
-            'controller_name' => 'MainController',
-        ]);
+        return $this->render('main/contact.html.twig');
     }
 }

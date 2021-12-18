@@ -1,5 +1,72 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
 
-{% block body %}
-    <h1>Contact</h1>
+{% block title %}Contact | {{ parent() }}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>Contactez notre service client</h1>
+        </div>
+    </div>
+
+    <hr/>
+
+    <div class="row">
+        <div class="col-md-12">
+            <p class="lead">
+                Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo. Donec ullamcorper nulla non metus auctor fringilla. </p>
+        </div>
+    </div>
+    <form>
+        <div class="form-group">
+            <label for="firstname">Votre prénom</label>
+            <input type="text" class="form-control" id="firstname" placeholder="Prénom">
+        </div>
+        <div class="form-group">
+            <label for="lastname">Votre nom</label>
+            <input type="text" class="form-control" id="lastname" placeholder="Nom">
+        </div>
+        <div class="form-group">
+            <label for="email">Votre adresse email</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Adresse email">
+        </div>
+        <div class="form-group">
+            <label for="message">Votre message</label>
+            <textarea class="form-control" name="message" rows="6"></textarea>
+        </div>
+        <button type="submit" class="btn btn-info">Envoyer mon message</button>
+    </form>
+
+    {#{% for flash_type, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ flash_type }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+    
+    {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_errors(form.firstName) }}
+            {{ form_label(form.firstName) }}
+            {{ form_widget(form.firstName, {'attr': {'class': 'form-control', 'placeholder': form.firstName.vars.label} }) }}
+        </div>
+        <div class="form-group">
+            {{ form_errors(form.lastName) }}
+            {{ form_label(form.lastName) }}
+            {{ form_widget(form.lastName, {'attr': {'class': 'form-control', 'placeholder': form.lastName.vars.label} }) }}
+        </div>
+        <div class="form-group">
+            {{ form_errors(form.email) }}
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': form.email.vars.label} }) }}
+        </div>
+        <div class="form-group">
+            {{ form_errors(form.message) }}
+            {{ form_label(form.message) }}
+            {{ form_widget(form.message, {'attr': {'class': 'form-control', 'placeholder': form.message.vars.label, 'rows': 6} }) }}
+        </div>
+        <button type="submit" class="btn btn-info">Envoyer mon message</button>
+    {{ form_end(form) }}#}
+
 {% endblock %}
