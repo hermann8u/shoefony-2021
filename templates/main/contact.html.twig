@@ -17,34 +17,15 @@
                 Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo. Donec ullamcorper nulla non metus auctor fringilla. </p>
         </div>
     </div>
-    <form>
-        <div class="form-group">
-            <label for="firstname">Votre prénom</label>
-            <input type="text" class="form-control" id="firstname" placeholder="Prénom">
-        </div>
-        <div class="form-group">
-            <label for="lastname">Votre nom</label>
-            <input type="text" class="form-control" id="lastname" placeholder="Nom">
-        </div>
-        <div class="form-group">
-            <label for="email">Votre adresse email</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Adresse email">
-        </div>
-        <div class="form-group">
-            <label for="message">Votre message</label>
-            <textarea class="form-control" name="message" rows="6"></textarea>
-        </div>
-        <button type="submit" class="btn btn-info">Envoyer mon message</button>
-    </form>
 
-    {#{% for flash_type, messages in app.flashes %}
+    {% for flash_type, messages in app.flashes %}
         {% for message in messages %}
             <div class="alert alert-{{ flash_type }}" role="alert">
                 {{ message }}
             </div>
         {% endfor %}
     {% endfor %}
-    
+
     {{ form_start(form) }}
         <div class="form-group">
             {{ form_errors(form.firstName) }}
@@ -67,6 +48,6 @@
             {{ form_widget(form.message, {'attr': {'class': 'form-control', 'placeholder': form.message.vars.label, 'rows': 6} }) }}
         </div>
         <button type="submit" class="btn btn-info">Envoyer mon message</button>
-    {{ form_end(form) }}#}
+    {{ form_end(form) }}
 
 {% endblock %}
