@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Contact;
+use App\Entity\Store\Product;
 use App\Form\ContactType;
 use App\Mailer\ContactMailer;
 use Doctrine\ORM\EntityManagerInterface;
