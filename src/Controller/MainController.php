@@ -5,22 +5,18 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Contact;
-use App\Entity\Store\Product;
 use App\Form\ContactType;
-use App\Mailer\ContactMailer;
+use App\Manager\ContactManager;
 use App\Repository\Store\ProductRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 final class MainController extends AbstractController
 {
     public function __construct(
-        private ContactMailer $mailer,
-        private EntityManagerInterface $em,
+        private ContactManager $contactManager,
         private ProductRepository $productRepository,
     ) {
     }
@@ -49,13 +45,8 @@ final class MainController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($contact);
-            $this->em->flush();
+            $this->contactManager->save($contact);
 
-            $this->mailer->send($contact);
-            
-            $this->addFlash('success', 'Merci, votre demande de contact a bien été prise en compte !');
-            
             return $this->redirectToRoute('main_contact');
         }
         

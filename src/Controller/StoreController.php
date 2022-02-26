@@ -6,9 +6,9 @@ namespace App\Controller;
 
 use App\Entity\Store\Comment;
 use App\Form\CommentType;
+use App\Manager\Store\ProductManager;
 use App\Repository\Store\BrandRepository;
 use App\Repository\Store\ProductRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,9 +18,9 @@ use Symfony\Component\Routing\Annotation\Route;
 final class StoreController extends AbstractController
 {
     public function __construct(
-        private EntityManagerInterface $em,
         private ProductRepository $productRepository,
         private BrandRepository $brandRepository,
+        private ProductManager $productManager,
     ) {
     }
 
@@ -66,17 +66,13 @@ final class StoreController extends AbstractController
         }
 
         $comment = new Comment();
-        $comment->setProduct($product);
 
         $form = $this->createForm(CommentType::class, $comment);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->addFlash('success', 'Votre commentaire a été enregistré !');
-
-            $this->em->persist($comment);
-            $this->em->flush();
+            $this->productManager->addComment($product, $comment);
 
             return $this->redirectToRoute('store_show_product', ['id' => $id, 'slug' => $slug]);
         }

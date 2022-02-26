@@ -18,13 +18,7 @@
         </div>
     </div>
 
-    {% for flash_type, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="alert alert-{{ flash_type }}" role="alert">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endfor %}
+    {{ include('_flash_message.html.twig') }}
 
     {{ form_start(form) }}
         <div class="form-group">

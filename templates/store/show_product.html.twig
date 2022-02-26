@@ -33,6 +33,8 @@
                     </div>
                 </div>
 
+                {{ include('_flash_message.html.twig') }}
+
                 <div class="well">
                     <p class="pull-right label label-success">Actuellement {{ product.comments|length }} avis</p>
                     {% for comment in product.comments %}
