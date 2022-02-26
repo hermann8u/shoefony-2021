@@ -8,27 +8,30 @@ use App\Entity\Contact;
 use App\Entity\Store\Product;
 use App\Form\ContactType;
 use App\Mailer\ContactMailer;
+use App\Repository\Store\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 final class MainController extends AbstractController
 {
-    private ContactMailer $mailer;
-    private EntityManagerInterface $em;
-
-    public function __construct(ContactMailer $mailer, EntityManagerInterface $em)
-    {
-        $this->mailer = $mailer;
-        $this->em = $em;
+    public function __construct(
+        private ContactMailer $mailer,
+        private EntityManagerInterface $em,
+        private ProductRepository $productRepository,
+    ) {
     }
 
     #[Route('/', name: 'main_homepage', methods: ['GET'])]
     public function homepage(): Response
     {
-        return $this->render('main/homepage.html.twig');
+        return $this->render('main/homepage.html.twig', [
+            'lastCreatedProducts' => $this->productRepository->findLastCreatedProducts(),
+            'mostPopularProducts' => $this->productRepository->findMostPopularProducts(),
+        ]);
     }
     
     #[Route('/presentation', name: 'main_presentation', methods: ['GET'])]

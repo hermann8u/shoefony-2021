@@ -2,8 +2,10 @@
 
 namespace App\Repository\Store;
 
+use App\Entity\Store\Brand;
 use App\Entity\Store\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,32 +21,112 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-    // /**
-    //  * @return Product[] Returns an array of Product objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findOneWithDetails(int $id): ?Product
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
+        $qb = $this->createQueryBuilder('p')
+            ->where('p.id = :id')
+            ->setParameter('id', $id)
+            ->orderBy('c.createdAt', 'DESC')
         ;
-    }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Product
+        $this->addJoinComments($qb);
+        $this->addJoinImage($qb);
+        $this->addJoinColors($qb);
+        $this->addJoinBrand($qb);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @return Product[]
+     */
+    public function findAllWithDetails(): array
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
+        $qb = $this->createQueryBuilder('p')
+            ->orderBy('p.createdAt', 'DESC')
+        ;
+
+        $this->addJoinImage($qb);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @return Product[]
+     */
+    public function findProductsByBrand(Brand $brand): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->where('p.brand = :brand')
+            ->setParameter('brand', $brand)
+        ;
+
+        $this->addJoinImage($qb);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @return Product[]
+     */
+    public function findLastCreatedProducts(): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->orderBy('p.createdAt', 'DESC')
+            ->setMaxResults(4)
+        ;
+
+        $this->addJoinImage($qb);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @return Product[]
+     */
+    public function findMostPopularProducts(): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->leftJoin('p.comments', 'c')
+            ->groupBy('p', 'i')
+            ->orderBy('COUNT(c.id)', 'DESC')
+            ->setMaxResults(4)
+        ;
+
+        $this->addJoinImage($qb);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    private function addJoinComments(QueryBuilder $qb): void
+    {
+        $qb
+            ->addSelect('c')
+            ->leftJoin('p.comments', 'c')
         ;
     }
-    */
+
+    private function addJoinColors(QueryBuilder $qb): void
+    {
+        $qb
+            ->addSelect('col')
+            ->leftJoin('p.colors', 'col')
+        ;
+    }
+
+    private function addJoinImage(QueryBuilder $qb): void
+    {
+        $qb
+            ->addSelect('i')
+            ->innerJoin('p.image', 'i')
+        ;
+    }
+
+    private function addJoinBrand(QueryBuilder $qb): void
+    {
+        $qb
+            ->addSelect('b')
+            ->innerJoin('p.brand', 'b')
+        ;
+    }
 }

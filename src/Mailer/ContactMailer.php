@@ -12,15 +12,11 @@ use Twig\Environment;
 
 final class ContactMailer
 {
-    private MailerInterface $mailer;
-    private Environment $twig;
-    private string $contactEmailAddress;
-
-    public function __construct(MailerInterface $mailer, Environment $twig, string $contactEmailAddress)
-    {
-        $this->mailer = $mailer;
-        $this->twig = $twig;
-        $this->contactEmailAddress = $contactEmailAddress;
+    public function __construct(
+        private MailerInterface $mailer,
+        private Environment $twig,
+        private string $contactEmailAddress,
+    ) {
     }
     
     public function send(Contact $contact): void
@@ -36,7 +32,7 @@ final class ContactMailer
         
         try {
             $this->mailer->send($email);
-        } catch (TransportExceptionInterface){
+        } catch (TransportExceptionInterface) {
         }
     }
 }

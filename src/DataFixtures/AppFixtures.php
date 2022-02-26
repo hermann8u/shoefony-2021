@@ -6,6 +6,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Store\Brand;
 use App\Entity\Store\Color;
+use App\Entity\Store\Comment;
 use App\Entity\Store\Image;
 use App\Entity\Store\Product;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -26,6 +27,21 @@ final class AppFixtures extends Fixture
         ['Bleu'],
         ['Noir'],
         ['Blanc'],
+    ];
+
+    private const DATA_COMMENTS_USERNAMES = [
+        'CrazyRiku',
+        'WhiteStone',
+        'OmegaStorm',
+        'FouSmall',
+    ];
+
+    private const DATA_COMMENTS_MESSAGES = [
+        'Super produit ! Je recommande',
+        'Attention, ça taille grand !',
+        'Mouais, bof',
+        'Pas ouf :/',
+        'Parfait pour mes séances de running intensives !'
     ];
 
     private ObjectManager $manager;
@@ -84,6 +100,15 @@ final class AppFixtures extends Fixture
                     $color = $this->getReference(Color::class . $j);
                     $product->addColor($color);
                 }
+            }
+
+            for ($j = 0; $j < random_int(0, 20); $j++) {
+                $comment = (new Comment())
+                    ->setUsername(self::DATA_COMMENTS_USERNAMES[array_rand(self::DATA_COMMENTS_USERNAMES)])
+                    ->setMessage(self::DATA_COMMENTS_MESSAGES[array_rand(self::DATA_COMMENTS_MESSAGES)])
+                ;
+
+                $product->addComment($comment);
             }
 
             $this->manager->persist($product);

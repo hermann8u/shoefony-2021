@@ -5,13 +5,7 @@
 {% block content %}
     <div class="row">
         <div class="col-md-3">
-            <p class="lead">Nos marques</p>
-            <div class="list-group">
-                <a href="#" class="list-group-item active">Toutes les marques</a>
-                {% for brand in brands %}
-                    <a href="#" class="list-group-item">{{ brand.name }}</a>
-                {% endfor %}
-            </div>
+            {{ render(controller('App\\Controller\\StoreController::listBrands', {'brandId': product.brand.id})) }}
         </div>
 
         <div class="col-md-9">
@@ -40,49 +34,34 @@
                 </div>
 
                 <div class="well">
-                    <p class="pull-right label label-success">Actuellement 3 avis</p>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <span class="label label-info">Prénom Nom</span>
-                            <span class="label label-default pull-right">28/01/2015</span>
-                            <p>Un commentaire sur le produit, rédigé par un client, sera affiché à cet endroit.</p>
+                    <p class="pull-right label label-success">Actuellement {{ product.comments|length }} avis</p>
+                    {% for comment in product.comments %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <span class="label label-info">{{ comment.username }}</span>
+                                <span class="label label-default pull-right">{{ comment.createdAt|date('d/m/Y') }}</span>
+                                <p>{{ comment.message }}</p>
+                            </div>
                         </div>
-                    </div>
 
-                    <hr/>
+                        <hr/>
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <span class="label label-info">Prénom Nom</span>
-                            <span class="label label-default pull-right">28/01/2015</span>
-                            <p>Un commentaire sur le produit, rédigé par un client, sera affiché à cet endroit.</p>
-                        </div>
-                    </div>
-
-                    <hr/>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <span class="label label-info">Prénom Nom</span>
-                            <span class="label label-default pull-right">28/01/2015</span>
-                            <p>Un commentaire sur le produit, rédigé par un client, sera affiché à cet endroit.</p>
-                        </div>
-                    </div>
-
-                    <hr/>
+                    {% endfor %}
 
                     <div>
-                        <form>
+                        {{ form_start(form) }}
                             <div class="form-group">
-                                <label for="name">Votre nom</label>
-                                <input type="text" class="form-control" id="name">
+                                {{ form_errors(form.username) }}
+                                {{ form_label(form.username) }}
+                                {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
                             </div>
                             <div class="form-group">
-                                <label for="message">Votre avis</label>
-                                <textarea class="form-control" name="comment" rows="3"></textarea>
+                                {{ form_errors(form.message) }}
+                                {{ form_label(form.message) }}
+                                {{ form_widget(form.message, {'attr': {'class': 'form-control'}}) }}
                             </div>
                             <button type="submit" class="btn btn-info">Envoyer mon avis</button>
-                        </form>
+                        {{ form_end(form) }}
                     </div>
                 </div>
             </div>
